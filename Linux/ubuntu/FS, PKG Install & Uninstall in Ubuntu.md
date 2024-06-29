@@ -52,6 +52,10 @@ Here’s a detailed explanation of the key directories in a typical Ubuntu Linux
 ### `/lib` - System Libraries
 - **Purpose**: Contains essential shared libraries and kernel modules.
 - **Comparison**: Similar to `C:\Windows\System32`.
+- **/lib/modules/`$(uname -r)`/ **: This is the primary directory where kernel modules (drivers) are stored in Ubuntu. The `$(uname -r)` part represents the kernel version, so the path adapts to the currently running kernel. This directory contains loadable kernel modules, including drivers for various hardware like network interfaces, file systems, and more.
+- **/etc/modprobe.d/**: This directory doesn't store drivers but configuration files that determine how kernel modules (drivers) are loaded. It can include options to blacklist certain modules or set specific parameters for them when they load.
+
+If you use it in a directory path, it will be replaced with the current kernel version. For example, if the current kernel version is 5.4.0-104, then `/lib/modules/$(uname -r)/` will be replaced with `/lib/modules/5.4.0-104/`.
 
 ### `/opt` - Optional add-on Applications
 - **Purpose**: Reserved for the installation of add-on application software packages.
@@ -72,6 +76,17 @@ Here’s a detailed explanation of the key directories in a typical Ubuntu Linux
 ### `/sys` - System Information
 - **Purpose**: Contains information and configuration for the system (devices, drivers, etc.).
 - **Comparison**: No direct equivalent in Windows.
+- **/lib/modules/`$(uname -r)`/**: Contains the actual driver files necessary for hardware interaction.
+- **/sys**: Provides a dynamic interface to kernel data structures, allowing user space programs to obtain information about and interact with the kernel. It does not store drivers but allows runtime interaction and configuration.
+
+**Exploring Device Information**: You can navigate to `/sys/devices` to see a hierarchy of devices as recognized by the kernel. Each device directory contains attributes and settings that can be read or sometimes written to adjust device behavior.
+
+For example:
+
+```bash
+cat /sys/class/net/eth0/speed
+```
+This command would display the speed of the `eth0` network interface.
 
 ## Common Approaches for Installing Software
 - **Packages**: Managed via package managers like `apt` or `snap`. Installed typically under `/usr/bin`, `/usr/lib`, etc.
