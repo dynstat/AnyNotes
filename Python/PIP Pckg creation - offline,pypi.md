@@ -16,7 +16,7 @@
    - **.gitignore**: Specifies intentionally untracked files to ignore.
 
 #### Steps to Create a Wheel or Source Distribution Offline
-1. **Setup Script ([setup.py](file:///d%3A/proj/color-terminal/setup.py#1%2C1-1%2C1))**:
+1. **Setup Script (setup.py)**:
    - Define package metadata and dependencies.
 2. **Building the Package**:
    ```bash
@@ -87,7 +87,7 @@ When you've made changes to your package and need to update it on PyPI, follow t
 Make the necessary changes to your package files, such as bug fixes, feature additions, or documentation updates.
 
 #### 2. Increment the Version Number
-In your **setup.py** file, increment the version number. Adhering to [semantic versioning](https://semver.org/) is crucial:
+In your **setup.py** file, increment the version number. Adhering to semantic versioning is crucial:
 - **Major version** for incompatible API changes.
 - **Minor version** for adding functionality in a backwards-compatible manner.
 - **Patch version** for backwards-compatible bug fixes.
@@ -132,3 +132,86 @@ Make sure to delete any old distributions in the `dist/` directory before runnin
 - **Announcements**: If your package has a significant user base, consider announcing the update through appropriate channels such as mailing lists, social media, or a project blog.
 
 By following these steps, you can efficiently manage updates to your Python package, ensuring users have access to the latest features and fixes.
+
+The MANIFEST.in file is used in Python packaging to specify additional files to include in the source distribution (sdist) that are not automatically included by default. This can include documentation, configuration files, data files, etc.
+
+### Uses of MANIFEST.in
+
+1. **Include Specific Files**: You can specify individual files to include.
+2. **Include Entire Directories**: You can include all files within a directory.
+3. **Exclude Files**: You can exclude specific files or patterns.
+4. **Include Patterns**: You can include files matching a specific pattern.
+5. **Recursive Inclusion**: You can include files recursively from directories.
+
+### Example MANIFEST.in
+
+Here is an example MANIFEST.in file with various uses:
+
+```plaintext:MANIFEST.in
+# Include the README file
+include README.md
+
+# Include the LICENSE file
+include LICENSE
+
+# Include all .txt files in the docs directory
+recursive-include docs *.txt
+
+# Include all files in the data directory
+recursive-include data *
+
+# Exclude all .pyc files
+global-exclude *.pyc
+
+# Include all .json files in the package
+include mypackage/*.json
+
+# Include all files in the tests directory
+recursive-include tests *
+```
+
+### Explanation
+
+- `include README.md`: Includes the `README.md` file in the distribution.
+- `include LICENSE`: Includes the `LICENSE` file in the distribution.
+- `recursive-include docs *.txt`: Includes all `.txt` files in the `docs` directory and its subdirectories.
+- `recursive-include data *`: Includes all files in the `data` directory and its subdirectories.
+- `global-exclude *.pyc`: Excludes all `.pyc` files from the distribution.
+- `include mypackage/*.json`: Includes all `.json` files in the `mypackage` directory.
+- `recursive-include tests *`: Includes all files in the `tests` directory and its subdirectories.
+
+### Example Project Structure
+
+Given the following project structure:
+
+```
+myproject/
+├── data/
+│   ├── datafile1.csv
+│   └── datafile2.csv
+├── docs/
+│   ├── doc1.txt
+│   └── doc2.txt
+├── mypackage/
+│   ├── __init__.py
+│   └── config.json
+├── tests/
+│   ├── test1.py
+│   └── test2.py
+├── README.md
+├── LICENSE
+└── setup.py
+```
+
+The `MANIFEST.in` file above will ensure that the `README.md`, `LICENSE`, all `.txt` files in `docs`, all files in `data`, all `.json` files in `mypackage`, and all files in `tests` are included in the source distribution, while excluding all `.pyc` files.
+
+### How to Use
+
+1. **Create `MANIFEST.in`**: Create a `MANIFEST.in` file in the root of your project directory.
+2. **Build the Distribution**: Run the following command to build the source distribution:
+    ```bash
+    python setup.py sdist
+    ```
+3. **Check the Distribution**: Verify that the files specified in `MANIFEST.in` are included in the generated `.tar.gz` file in the `dist` directory.
+
+By using `MANIFEST.in`, you can have fine-grained control over which files are included in your source distribution, ensuring that all necessary files are packaged and distributed correctly.
