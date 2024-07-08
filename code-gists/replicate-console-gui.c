@@ -139,12 +139,12 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             // Set text and background colors, font, and size
             SendMessage(hEdit, EM_SETBKGNDCOLOR, 0, RGB(30, 30, 30));
-            CHARFORMAT2 cf;
-            ZeroMemory(&cf, sizeof(CHARFORMAT2));
-            cf.cbSize = sizeof(CHARFORMAT2);
+            CHARFORMAT2W cf;
+            ZeroMemory(&cf, sizeof(CHARFORMAT2W));
+            cf.cbSize = sizeof(CHARFORMAT2W);
             cf.dwMask = CFM_COLOR | CFM_FACE | CFM_SIZE;
             cf.crTextColor = RGB(173, 216, 230); // Light blue text
-            wcscpy_s(cf.szFaceName, LF_FACESIZE, L"Consolas");
+            lstrcpynW(cf.szFaceName, L"Consolas", LF_FACESIZE);
             cf.yHeight = 240; // 12 point font (12 * 20)
             SendMessage(hEdit, EM_SETCHARFORMAT, SCF_ALL, (LPARAM)&cf);
         }
