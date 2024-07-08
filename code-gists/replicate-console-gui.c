@@ -1,4 +1,6 @@
 // gcc replicate-console-gui.c -o replicate-console-gui -mwindows -luser32 -lgdi32 -luxtheme -lcomctl32 -ldwmapi
+// cl replicate-console-gui.c /Fe:replicate-console-gui.exe /link user32.lib gdi32.lib uxtheme.lib comctl32.lib dwmapi.lib
+
 
 #include <richedit.h>
 #include <uxtheme.h>
