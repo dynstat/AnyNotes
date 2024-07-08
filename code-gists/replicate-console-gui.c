@@ -112,7 +112,7 @@ DWORD WINAPI RunningLoop(LPVOID lpParam)
 {
     while (running)
     {
-        AppendText(hEdit, "\tMain code is Running\n\n\n");
+        AppendText(hEdit, "\tMain code is Running\n");
         Sleep(1000); // Wait for 1 second
     }
     return 0;
@@ -152,6 +152,21 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     case WM_SIZE:
         MoveWindow(hEdit, 0, 0, LOWORD(lParam), HIWORD(lParam), TRUE);
+        SetWindowText(hEdit, textBuffer); // Restore the text from the buffer
+        if (wParam == SIZE_MINIMIZED)
+        {
+            AppendText(hEdit, "\tMinimize button clicked\n\n");
+        }
+        else if (wParam == SIZE_MAXIMIZED)
+        {
+            AppendText(hEdit, "\tMaximize button clicked\n\n");
+        }
+        else if (wParam == SIZE_RESTORED)
+        {
+            // AppendText(hEdit, "\tWindow restored\n\n");
+            // Set the entire text content
+            // SetWindowText(hEdit, textBuffer);
+        }
         return 0;
 
     case WM_CTLCOLOREDIT:
