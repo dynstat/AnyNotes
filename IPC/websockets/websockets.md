@@ -37,7 +37,7 @@ logger = logging.getLogger(__name__)
 connected_clients = defaultdict(set)
 
 # Maximum message size (in bytes)
-MAX_MESSAGE_SIZE = 1024 * 1024  # 1 MB
+MAX_MESSAGE_SIZE = 1024 * 1024
 
 class AuthenticationError(Exception):
     pass
