@@ -67,3 +67,14 @@ To resolve cyclic imports, you can restructure your code to avoid such dependenc
 By moving the imports inside the functions, Python will only attempt to load the modules when the function is actually called, which can often avoid the cyclic dependency as the initial loading of the module doesn't depend on the other module being fully loaded.
 
 This example demonstrates how to handle and resolve cyclic imports by restructuring the code to defer imports, thus avoiding the initialization deadlock.
+
+``` python:
+ def function_b():
+       from module_a import function_a  # Import moved inside the function`
+       print("Function B")`
+       function_a()`
+   
+   print("Module B loaded")`
+```
+`
+
