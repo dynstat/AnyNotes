@@ -1,4 +1,4 @@
-# Permissions to new non sudo user for docker
+## Permissions to new non sudo user for docker
 
 For permission denied error when trying to run Docker commands as a non-root user, add that user to the `docker` group:
 
