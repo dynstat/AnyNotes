@@ -102,8 +102,6 @@ Next time, we can learn how to add more files to your project, like adding more 
 
 ### PLAN
 
-Certainly! I'll modify the plan to focus on the latest version of CMake (currently 3.27.7) and structure it for a 10-year-old who's good at coding. We'll emphasize practical examples and fun projects to help you remember the concepts.
-
 1. Getting Started with CMake
    - Installing the latest CMake (3.27.7) on Windows, macOS, and Linux
    - Your first CMake project: Building a "Hello, World!" program
