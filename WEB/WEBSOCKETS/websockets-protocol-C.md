@@ -1,7 +1,5 @@
 # Detailed Explanation of the WebSocket Protocol
 
-WebSockets enable real-time, bidirectional communication between clients and servers over a single TCP connection. This section delves into the **WebSocket protocol**, focusing on its **frame structure**, key components like **FIN**, **Opcode**, **Mask**, and **Payload**, and compares it with **raw TCP sockets** to highlight their differences and use cases.
-
 ## Table of Contents
 
 1. [Overview](#overview)
@@ -13,6 +11,16 @@ WebSockets enable real-time, bidirectional communication between clients and ser
      - [Payload Length](#payload-length)
      - [Masking-Key](#masking-key)
      - [Payload Data](#payload-data)
+   - [Frame Diagram](#frame-diagram)
+   - [Understanding the WebSocket Frame Structure](#understanding-the-websocket-frame-structure)
+     - [Key Definitions](#key-definitions)
+     - [Frame Diagram Explained](#frame-diagram-explained)
+     - [Breakdown of the Frame Components](#breakdown-of-the-frame-components)
+     - [Example Breakdown](#example-breakdown)
+     - [Visual Representation](#visual-representation)
+     - [Step-by-Step Explanation](#step-by-step-explanation)
+     - [Unmasking Process](#unmasking-process)
+     - [Summary](#summary)
 3. [Sample Frames](#sample-frames)
    - [Client-to-Server Frame Example](#client-to-server-frame-example)
    - [Server-to-Client Frame Example](#server-to-client-frame-example)
@@ -20,6 +28,9 @@ WebSockets enable real-time, bidirectional communication between clients and ser
    - [TCP Socket Data Transmission](#tcp-socket-data-transmission)
    - [WebSocket Frame vs. TCP Packet](#websocket-frame-vs-tcp-packet)
 5. [Visualizing Data Flow](#visualizing-data-flow)
+   - [Client-Side Communication](#client-side-communication)
+   - [Server-Side Communication](#server-side-communication)
+   - [Data Flow Diagram](#data-flow-diagram)
 6. [Conclusion](#conclusion)
 
 ---
@@ -112,16 +123,16 @@ Below is a visual representation of a WebSocket frame:
 ```
 
 
-## Understanding the WebSocket Frame Structure
+### Understanding the WebSocket Frame Structure
 
 A WebSocket frame is a fundamental unit of communication in the WebSocket protocol. It encapsulates the data sent between the client and the server. To comprehend this structure, it's essential to understand both **bytes** and **bits**.
 
-### Key Definitions
+#### Key Definitions
 
 - **Byte**: A unit of digital information that consists of **8 bits**. Bytes are typically numbered starting from **0**.
 - **Bit**: The smallest unit of data in computing, representing a **0** or **1**.
 
-### Frame Diagram Explained
+#### Frame Diagram Explained
 
 Below is a refined and detailed representation of a WebSocket frame:
 
@@ -144,7 +155,7 @@ Below is a refined and detailed representation of a WebSocket frame:
 +---------------------------------------------------------------+
 ```
 
-### Breakdown of the Frame Components
+#### Breakdown of the Frame Components
 
 1. **Byte 0**
    - **FIN (1 bit)**: Indicates if this is the final fragment in a message.
@@ -181,7 +192,7 @@ Below is a refined and detailed representation of a WebSocket frame:
    - The actual data being transmitted.
    - If masked, each byte of the payload is XOR'd with a byte from the masking key.
 
-### Example Breakdown
+#### Example Breakdown
 
 Let's consider an example frame to illustrate each component:
 
@@ -227,7 +238,7 @@ Let's consider an example frame to illustrate each component:
 +---------------------------------------------------------------+
 ```
 
-### Step-by-Step Explanation
+#### Step-by-Step Explanation
 
 1. **FIN, RSV1-3, Opcode (Byte 0)**
    - **FIN**: Indicates if this is the last frame for the message.
@@ -254,7 +265,7 @@ Let's consider an example frame to illustrate each component:
    - The actual content being transmitted.
    - If masked, each byte is XOR'd with the corresponding byte from the **Masking-Key** to retrieve the original data.
 
-### Unmasking Process
+#### Unmasking Process
 
 When the **Mask** bit is `1`, the payload data is masked for security reasons. To retrieve the original data:
 
@@ -278,7 +289,7 @@ Unmasked Byte 4: 0x4C ^ 0x3D = 0x71 ('q')
 
 *Note: The actual unmasked payload should align with the intended message. Ensure that the masking process is correctly implemented according to the WebSocket specification.*
 
-### Summary
+#### Summary
 
 - **Bytes**: Numbered starting from `0`, each consisting of `8 bits`.
 - **Bits**: Numbered within each byte from `0` to `7`.
