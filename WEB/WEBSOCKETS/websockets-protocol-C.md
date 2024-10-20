@@ -96,35 +96,6 @@ Each WebSocket frame consists of the following components:
 
 Below is a visual representation of a WebSocket frame:
 
-```
-  0                   1                   2                   3
-  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
- +-+-+-+-+-------+-------------------------------+
- |F|R|R|R| opcode| Mask | Payload Length        |
- |I|S|S|S|  (4)  |  (1) |  (7 or 16 or 64)      |
- |N|V|V|V|       |      |                       |
- | |1|2|3|       |      |                       |
- +-+-+-+-+-------+------+------------------------+
- |     Masking-Key (if MASK set to 1)            |
- +-----------------------------------------------+
- |               Payload Data                    |
- +-----------------------------------------------+
-```
-
-
-## Understanding the WebSocket Frame Structure
-
-A WebSocket frame is a fundamental unit of communication in the WebSocket protocol. It encapsulates the data sent between the client and the server. To comprehend this structure, it's essential to understand both **bytes** and **bits**.
-
-### Key Definitions
-
-- **Byte**: A unit of digital information that consists of **8 bits**. Bytes are typically numbered starting from **0**.
-- **Bit**: The smallest unit of data in computing, representing a **0** or **1**.
-
-### Frame Diagram Explained
-
-Below is a refined and detailed representation of a WebSocket frame:
-
 ```plaintext
 0                   1                   2                   3
 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -143,6 +114,16 @@ Below is a refined and detailed representation of a WebSocket frame:
 :                     Payload Data continued ...                :
 +---------------------------------------------------------------+
 ```
+
+
+## Understanding the WebSocket Frame Structure
+
+A WebSocket frame is a fundamental unit of communication in the WebSocket protocol. It encapsulates the data sent between the client and the server. To comprehend this structure, it's essential to understand both **bytes** and **bits**.
+
+### Key Definitions
+
+- **Byte**: A unit of digital information that consists of **8 bits**. Bytes are typically numbered starting from **0**.
+- **Bit**: The smallest unit of data in computing, representing a **0** or **1**.
 
 ### Breakdown of the Frame Components
 
