@@ -88,6 +88,17 @@ int main() {
     // Command to execute (same executable)
     char cmd[] = "windows_fork_example.exe";
 
+    // CreateProcess parameters:
+    // 1. lpApplicationName (NULL) - Use command line instead
+    // 2. lpCommandLine (cmd) - Command line to execute
+    // 3. lpProcessAttributes (NULL) - Child process gets default security attributes
+    // 4. lpThreadAttributes (NULL) - Main thread gets default security attributes  
+    // 5. bInheritHandles (FALSE) - Child does not inherit parent's handles
+    // 6. dwCreationFlags (0) - No special creation flags
+    // 7. lpEnvironment (NULL) - Use parent's environment block
+    // 8. lpCurrentDirectory (NULL) - Use parent's current directory
+    // 9. lpStartupInfo (&si) - Startup info structure
+    // 10. lpProcessInformation (&pi) - Process info structure to receive details
     if (!CreateProcess(NULL, cmd, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
         printf("CreateProcess failed. Error: %lu\n", GetLastError());
         return 1;
