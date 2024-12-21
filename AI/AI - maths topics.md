@@ -58,10 +58,9 @@ A vector is an ordered list of numbers representing a point or direction in spac
 
 **Mathematical Definition:**
 A vector **v** in ℝⁿ is defined as:
-\[
+$$
 \mathbf{v} = \begin{bmatrix} v_1 \\ v_2 \\ \vdots \\ v_n \end{bmatrix}
-\]
-
+$$
 **Common Operations:**
 - **Addition:** \(\mathbf{u} + \mathbf{v} = \begin{bmatrix} u_1 + v_1 \\ u_2 + v_2 \\ \vdots \\ u_n + v_n \end{bmatrix}\)
 - **Scalar Multiplication:** \(c \mathbf{v} = \begin{bmatrix} c v_1 \\ c v_2 \\ \vdots \\ c v_n \end{bmatrix}\)
@@ -118,35 +117,34 @@ A matrix is a two-dimensional array of numbers arranged in rows and columns. In 
 
 **Mathematical Definition:**
 A matrix **A** of size m×n is:
-\[
+$$
 \mathbf{A} = \begin{bmatrix}
 a_{11} & a_{12} & \cdots & a_{1n} \\
 a_{21} & a_{22} & \cdots & a_{2n} \\
 \vdots & \vdots & \ddots & \vdots \\
 a_{m1} & a_{m2} & \cdots & a_{mn}
 \end{bmatrix}
-\]
-
+$$
 **Common Operations:**
 - **Addition:** Element-wise addition of two matrices of the same dimensions.
 - **Scalar Multiplication:** Multiplying every element of a matrix by a scalar.
 - **Matrix Multiplication:** For matrices **A** (m×n) and **B** (n×p):
-\[
+$$
 \mathbf{C} = \mathbf{A} \times \mathbf{B} \quad \text{where} \quad c_{ij} = \sum_{k=1}^{n} a_{ik} b_{kj}
-\]
+$$
 - **Transpose:** Flipping a matrix over its diagonal:
-\[
+$$
 \mathbf{A}^T = \begin{bmatrix}
 a_{11} & a_{21} & \cdots & a_{m1} \\
 a_{12} & a_{22} & \cdots & a_{m2} \\
 \vdots & \vdots & \ddots & \vdots \\
 a_{1n} & a_{2n} & \cdots & a_{mn}
 \end{bmatrix}
-\]
+$$
 - **Inverse:** For a square matrix **A**, the inverse **A⁻¹** satisfies:
-\[
+$$
 \mathbf{A} \times \mathbf{A}^{-1} = \mathbf{I}
-\]
+$$
 where **I** is the identity matrix.
 
 **Analogy:**  
@@ -220,19 +218,18 @@ Eigenvalues and eigenvectors are fundamental in understanding matrix transformat
 
 **Mathematical Definition:**
 For a square matrix **A**, a non-zero vector **v** is an eigenvector, and scalar λ is the corresponding eigenvalue if:
-\[
+$$
 \mathbf{A} \mathbf{v} = \lambda \mathbf{v}
-\]
-
+$$
 **Derivation:**
 Rearrange the equation:
-\[
+$$
 (\mathbf{A} - \lambda \mathbf{I}) \mathbf{v} = \mathbf{0}
-\]
+$$
 For non-trivial solutions, the determinant must be zero:
-\[
+$$
 \det(\mathbf{A} - \lambda \mathbf{I}) = 0
-\]
+$$
 Solving this characteristic equation yields the eigenvalues λ. Substitute each λ back to find the corresponding eigenvectors **v**.
 
 **Applications in AI/ML/DL:**
@@ -294,9 +291,9 @@ Singular Value Decomposition decomposes a matrix into three other matrices, reve
 
 **Mathematical Definition:**
 For any m×n matrix **A**, SVD is:
-\[
+$$
 \mathbf{A} = \mathbf{U} \Sigma \mathbf{V}^T
-\]
+$$
 where:
 - **U** is an m×m orthogonal matrix.
 - **Σ** is an m×n diagonal matrix with non-negative real numbers on the diagonal (singular values).
@@ -372,10 +369,9 @@ Differential calculus deals with the concept of a derivative, which measures how
 
 **Mathematical Definition:**
 The derivative of a function \( f(x) \) with respect to \( x \) is:
-\[
+$$
 f'(x) = \lim_{h \to 0} \frac{f(x + h) - f(x)}{h}
-\]
-
+$$
 **Applications in AI/ML/DL:**
 - **Gradient Descent:** Updates model parameters by moving in the direction opposite to the gradient.
 - **Backpropagation:** Computes gradients of loss with respect to weights.
@@ -414,10 +410,9 @@ Integral calculus is concerned with accumulation and area under curves. While le
 
 **Mathematical Definition:**
 The integral of a function \( f(x) \) from \( a \) to \( b \) is:
-\[
+$$
 \int_{a}^{b} f(x) dx
-\]
-
+$$
 **Applications in AI/ML/DL:**
 - **Probability Density Functions:** Integrals normalize continuous distributions.
 - **Expectation and Variance:** Calculations involve integrating over distributions.
@@ -457,16 +452,15 @@ In functions of multiple variables, partial derivatives measure the sensitivity 
 
 **Mathematical Definition:**
 For a function \( f(x, y) \):
-\[
+$$
 \frac{\partial f}{\partial x} = \lim_{h \to 0} \frac{f(x + h, y) - f(x, y)}{h}
-\]
-\[
+$$
+$$
 \frac{\partial f}{\partial y} = \lim_{h \to 0} \frac{f(x, y + h) - f(x, y)}{h}
-\]
-\[
+$$
+$$
 \nabla f = \left[ \frac{\partial f}{\partial x}, \frac{\partial f}{\partial y} \right]
-\]
-
+$$
 **Applications in AI/ML/DL:**
 - **Gradient Descent:** Uses gradients to update parameters.
 - **Optimization:** Finding minima/maxima of multivariate functions.
@@ -507,20 +501,18 @@ The chain rule is a fundamental theorem in calculus for computing the derivative
 
 **Mathematical Definition:**
 If \( y = f(g(x)) \), then:
-\[
+$$
 \frac{dy}{dx} = \frac{df}{dg} \cdot \frac{dg}{dx}
-\]
-
+$$
 **Derivation:**
 Consider \( y = f(g(x)) \).
-\[
+$$
 \frac{dy}{dx} = \lim_{h \to 0} \frac{f(g(x + h)) - f(g(x))}{h}
-\]
+$$
 Assuming differentiability,
-\[
+$$
 = f'(g(x)) \cdot g'(x)
-\]
-
+$$
 **Applications in AI/ML/DL:**
 - **Backpropagation:** Computes gradients layer-wise in neural networks.
 - **Computing Complex Derivatives:** In optimization problems with nested functions.
@@ -572,14 +564,13 @@ A probability distribution describes how probabilities are assigned to different
 
 **Mathematical Definition:**
 For a continuous random variable \( X \), the probability density function (pdf) is \( f_X(x) \), such that:
-\[
+$$
 P(a \leq X \leq b) = \int_{a}^{b} f_X(x) dx
-\]
+$$
 For a discrete random variable \( X \), the probability mass function (pmf) is \( p_X(x) \), such that:
-\[
+$$
 P(X = x) = p_X(x)
-\]
-
+$$
 **Analogy:**  
 Imagine rolling a fair die. The probability distribution assigns equal probabilities to each face from 1 to 6.
 
@@ -630,9 +621,9 @@ if __name__ == "__main__":
 Bayesian inference updates the probability estimate for a hypothesis as more evidence becomes available, based on Bayes' theorem.
 
 **Bayes' Theorem:**
-\[
+$$
 P(H|E) = \frac{P(E|H) \cdot P(H)}{P(E)}
-\]
+$$
 Where:
 - \( P(H|E) \) is the posterior probability.
 - \( P(E|H) \) is the likelihood.
@@ -700,9 +691,9 @@ MLE estimates the parameters of a statistical model by maximizing the likelihood
 
 **Mathematical Definition:**
 Given data \( X = \{x_1, x_2, \dots, x_n\} \) and parameters \( \theta \), the likelihood function is:
-\[
+$$
 L(\theta | X) = P(X | \theta) = \prod_{i=1}^{n} P(x_i | \theta)
-\]
+$$
 MLE finds \( \theta \) that maximizes \( L(\theta | X) \).
 
 **Applications in AI/ML/DL:**
@@ -765,10 +756,9 @@ Convex optimization deals with minimizing convex functions over convex sets. Con
 
 **Mathematical Definition:**
 A function \( f: \mathbb{R}^n \rightarrow \mathbb{R} \) is convex if for all \( \mathbf{x}, \mathbf{y} \in \mathbb{R}^n \) and \( \theta \in [0,1] \):
-\[
+$$
 f(\theta \mathbf{x} + (1 - \theta)\mathbf{y}) \leq \theta f(\mathbf{x}) + (1 - \theta) f(\mathbf{y})
-\]
-
+$$
 **Applications in AI/ML/DL:**
 - **Support Vector Machines (SVM):** Formulated as convex optimization problems.
 - **Logistic Regression:** Uses convex loss functions like cross-entropy.
@@ -824,9 +814,9 @@ Gradient Descent is an iterative optimization algorithm used to minimize a funct
 
 **Mathematical Definition:**
 Given a function \( f(\theta) \), the update rule is:
-\[
+$$
 \theta := \theta - \alpha \nabla f(\theta)
-\]
+$$
 where:
 - \( \theta \) are the parameters.
 - \( \alpha \) is the learning rate.
@@ -903,10 +893,9 @@ SGD updates model parameters using one training example at a time. It introduces
 
 **Mathematical Definition:**
 For each training example \( (x_i, y_i) \):
-\[
+$$
 \theta := \theta - \alpha \nabla f(\theta; x_i, y_i)
-\]
-
+$$
 **Applications in AI/ML/DL:**
 - **Large-Scale Machine Learning:** Efficient for large datasets where batch gradient descent is computationally expensive.
 - **Online Learning:** Updates model parameters on the fly as new data arrives.
@@ -983,13 +972,12 @@ Lagrange Multipliers are a strategy for finding the local maxima and minima of a
 
 **Mathematical Definition:**
 For a function \( f(\mathbf{x}) \) subject to \( g(\mathbf{x}) = 0 \), introduce a multiplier \( \lambda \) and set:
-\[
+$$
 \nabla f = \lambda \nabla g
-\]
-\[
+$$
+$$
 g(\mathbf{x}) = 0
-\]
-
+$$
 **Derivation:**
 By setting the gradient of the Lagrangian \( \mathcal{L}(\mathbf{x}, \lambda) = f(\mathbf{x}) - \lambda g(\mathbf{x}) \) to zero, we ensure that \( f \) has no tendency to increase in the constrained direction.
 
@@ -1053,10 +1041,9 @@ Entropy measures the uncertainty or randomness in a probability distribution. Hi
 
 **Mathematical Definition:**
 For a discrete random variable \( X \) with probability mass function \( P(X) \):
-\[
+$$
 H(X) = -\sum_{x} P(x) \log_2 P(x)
-\]
-
+$$
 **Applications in AI/ML/DL:**
 - **Decision Trees:** Used to select the best feature to split the data (Information Gain).
 - **Feature Selection:** Identifying features with high entropy.
@@ -1108,10 +1095,9 @@ Mutual Information quantifies the amount of information obtained about one rando
 
 **Mathematical Definition:**
 For random variables \( X \) and \( Y \):
-\[
+$$
 I(X; Y) = \sum_{x, y} P(x, y) \log_2 \left( \frac{P(x, y)}{P(x) P(y)} \right)
-\]
-
+$$
 **Applications in AI/ML/DL:**
 - **Feature Selection:** Selecting features with high mutual information relative to the target variable.
 - **Bayesian Networks:** Understanding dependencies between variables.
@@ -1168,10 +1154,9 @@ Activation functions introduce non-linearity into the neural network, enabling i
 ### Sigmoid Function
 
 **Function:**
-\[
+$$
 \sigma(x) = \frac{1}{1 + e^{-x}}
-\]
-
+$$
 **Mathematical Properties:**
 - **Range:** (0, 1)
 - **Derivative:** \( \sigma'(x) = \sigma(x)(1 - \sigma(x)) \)
@@ -1223,10 +1208,9 @@ if __name__ == "__main__":
 ### Hyperbolic Tangent (Tanh) Function
 
 **Function:**
-\[
+$$
 \tanh(x) = \frac{e^{x} - e^{-x}}{e^{x} + e^{-x}}
-\]
-
+$$
 **Mathematical Properties:**
 - **Range:** (-1, 1)
 - **Derivative:** \( \text{tanh}'(x) = 1 - \tanh^2(x) \)
@@ -1277,21 +1261,19 @@ if __name__ == "__main__":
 ### Rectified Linear Unit (ReLU)
 
 **Function:**
-\[
+$$
 \text{ReLU}(x) = \max(0, x)
-\]
-
+$$
 **Mathematical Properties:**
 - **Range:** [0, ∞)
-- **Derivative:** 
-\[
+- **Derivative:**
+$$
 \text{ReLU}'(x) =
 \begin{cases}
 1 & \text{if } x > 0 \\
 0 & \text{otherwise}
 \end{cases}
-\]
-
+$$
 **Purpose:**
 - Introduces non-linearity while maintaining computational efficiency.
 - Prevents the vanishing gradient problem.
@@ -1339,26 +1321,25 @@ if __name__ == "__main__":
 ### Leaky ReLU
 
 **Function:**
-\[
+$$
 \text{Leaky ReLU}(x) = 
 \begin{cases}
 x & \text{if } x > 0 \\
 \alpha x & \text{otherwise}
 \end{cases}
-\]
+$$
 where \( \alpha \) is a small constant (e.g., 0.01).
 
 **Mathematical Properties:**
 - **Range:** (-∞, ∞)
-- **Derivative:** 
-\[
+- **Derivative:**
+$$
 \text{Leaky ReLU}'(x) =
 \begin{cases}
 1 & \text{if } x > 0 \\
 \alpha & \text{otherwise}
 \end{cases}
-\]
-
+$$
 **Purpose:**
 - Mitigates the dying ReLU problem by allowing a small, non-zero gradient when \( x \leq 0 \).
 
@@ -1404,9 +1385,9 @@ if __name__ == "__main__":
 ### Softmax Function
 
 **Function:**
-\[
+$$
 \text{Softmax}(x_i) = \frac{e^{x_i}}{\sum_{j=1}^{K} e^{x_j}}
-\]
+$$
 for \( i = 1, 2, \dots, K \)
 
 **Mathematical Properties:**
@@ -1472,25 +1453,23 @@ Backpropagation is an algorithm used to compute gradients of the loss function w
 Consider a simple neural network with input \( \mathbf{x} \), weights \( \mathbf{W} \), activation function \( \sigma \), and loss function \( L \).
 
 1. **Forward Pass:**
-   \[
-   z = \mathbf{W} \mathbf{x}
-   \]
-   \[
-   a = \sigma(z)
-   \]
-   \[
-   L = \text{Loss}(a, y)
-   \]
-
+$$
+z = \mathbf{W} \mathbf{x}
+$$
+$$
+a = \sigma(z)
+$$
+$$
+L = \text{Loss}(a, y)
+$$
 2. **Backward Pass:**
    Compute gradients:
-   \[
-   \frac{\partial L}{\partial z} = \frac{\partial L}{\partial a} \cdot \sigma'(z)
-   \]
-   \[
-   \frac{\partial L}{\partial \mathbf{W}} = \frac{\partial L}{\partial z} \cdot \mathbf{x}^T
-   \]
-
+$$
+\frac{\partial L}{\partial z} = \frac{\partial L}{\partial a} \cdot \sigma'(z)
+$$
+$$
+\frac{\partial L}{\partial \mathbf{W}} = \frac{\partial L}{\partial z} \cdot \mathbf{x}^T
+$$
 **Steps:**
 - **Forward Pass:** Compute the output of each neuron.
 - **Compute Loss:** Evaluate how far the network's predictions are from the actual targets.
@@ -1598,10 +1577,9 @@ L1 regularization adds the absolute value of the coefficients as a penalty term 
 
 **Mathematical Definition:**
 For weights \( \mathbf{w} \) and regularization parameter \( \lambda \):
-\[
+$$
 L = \text{Loss}(f(\mathbf{x}; \mathbf{w}), y) + \lambda \sum_{i} |w_i|
-\]
-
+$$
 **Applications in AI/ML/DL:**
 - **Feature Selection:** Identifying and retaining only important features.
 - **Sparse Models:** Creating models with fewer non-zero parameters.
@@ -1668,10 +1646,9 @@ L2 regularization adds the squared magnitude of coefficients as a penalty term t
 
 **Mathematical Definition:**
 For weights \( \mathbf{w} \) and regularization parameter \( \lambda \):
-\[
+$$
 L = \text{Loss}(f(\mathbf{x}; \mathbf{w}), y) + \lambda \sum_{i} w_i^2
-\]
-
+$$
 **Applications in AI/ML/DL:**
 - **Preventing Overfitting:** Ensures weights remain small, promoting generalization.
 - **Stabilizing Training:** Avoids large updates in model parameters.
@@ -1738,10 +1715,9 @@ Loss functions quantify the difference between predicted outputs and actual targ
 ### Mean Squared Error (MSE)
 
 **Function:**
-\[
+$$
 \text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
-\]
-
+$$
 **Purpose:**
 - Measures the average squared difference between predicted (\( \hat{y} \)) and actual (\( y \)) values.
 - Commonly used in regression tasks.
@@ -1787,13 +1763,13 @@ Cross-Entropy loss measures the performance of classification models whose outpu
 
 **Mathematical Definition:**
 For binary classification:
-\[
+$$
 \text{Cross-Entropy Loss} = -\frac{1}{n} \sum_{i=1}^{n} \left[ y_i \log(\hat{y}_i) + (1 - y_i) \log(1 - \hat{y}_i) \right]
-\]
+$$
 For multi-class classification:
-\[
+$$
 \text{Cross-Entropy Loss} = -\frac{1}{n} \sum_{i=1}^{n} \sum_{c=1}^{C} y_{i,c} \log(\hat{y}_{i,c})
-\]
+$$
 where \( C \) is the number of classes.
 
 **Purpose:**
@@ -1871,10 +1847,9 @@ The Newton-Raphson method is an iterative technique for finding successively bet
 
 **Mathematical Definition:**
 Given a function \( f(x) \) and its derivative \( f'(x) \), the update rule is:
-\[
+$$
 x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}
-\]
-
+$$
 **Applications in AI/ML/DL:**
 - **Optimization:** Finding minima/maxima of loss functions.
 - **Root Finding:** Solving equations arising in various algorithms.
@@ -1947,9 +1922,9 @@ Gradient checking verifies the correctness of analytical gradient computations b
 
 **Mathematical Definition:**
 Using the finite difference method to approximate the gradient:
-\[
+$$
 \frac{\partial f}{\partial \theta} \approx \frac{f(\theta + \epsilon) - f(\theta - \epsilon)}{2\epsilon}
-\]
+$$
 where \( \epsilon \) is a small perturbation (e.g., \( 1e-4 \)).
 
 **Applications in AI/ML/DL:**
