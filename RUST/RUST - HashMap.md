@@ -120,8 +120,252 @@ map.insert(s, 1);         // Let it move
 
 This is why in our original substring problem (leetcode 3), we could use `char` directly without worrying about ownership - because `char` implements `Copy`!
 
+
+--- 
+---
+
+Now about Rust's ownership rules! Let me break it down:
+
+```rust
+use std::collections::HashMap;
+
+fn main() {
+    let mut map: HashMap<char, i32> = HashMap::new();
+    let c = 'a';
+
+    // Looking up methods (only need to read/reference the key):
+    map.contains_key(&c);  // needs & because it only needs to look at the value
+    map.get(&c);          // same - only needs to read
+    map.get_mut(&c);      // same - only needs to read the key (even though it can modify the value)
+
+    // Insert method (different behavior based on type):
+    map.insert(c, 1);     // no & needed because 'char' implements Copy
+    println!("{}", c);    // c still usable because it was copied
+
+    // Let's compare with String (which doesn't implement Copy):
+    let s = String::from("hello");
+    
+    map.contains_key(&s); // needs & - only reading
+    map.get(&s);         // needs & - only reading
+    map.insert(s, 1);    // no & because insert takes ownership
+    // println!("{}", s); // ❌ Error! s was moved into the map
+}
+```
+
+Here's why this happens:
+
+1. **For lookup methods** (`contains_key`, `get`, `get_mut`):
+```rust
+// Simplified method signatures:
+fn contains_key(&self, k: &K) -> bool
+fn get(&self, k: &K) -> Option<&V>
+fn get_mut(&mut self, k: &K) -> Option<&mut V>
+
+// These only need to read the key to check if it exists
+// They don't need ownership of the key
+```
+
+2. **For insert method**:
+```rust
+// Simplified method signature:
+fn insert(&mut self, k: K, v: V) -> Option<V>
+
+// This takes ownership of both key and value
+// Because they need to be stored in the map
+```
+
+Here's a more detailed example showing the difference between `Copy` and non-`Copy` types:
+
+```rust
+use std::collections::HashMap;
+
+fn main() {
+    let mut map = HashMap::new();
+
+    // With Copy types (like char, i32, bool):
+    let num = 42;
+    map.contains_key(&num);  // needs reference for lookup
+    map.insert(num, 1);      // copies num into map
+    println!("{}", num);     // ✅ still works because num was copied
+
+    // With non-Copy types (like String):
+    let string = String::from("hello");
+    map.contains_key(&string);  // needs reference for lookup
+    map.insert(string, 1);      // moves string into map
+    // println!("{}", string);   // ❌ Error! string was moved
+
+    // If you need to keep the original String:
+    let string2 = String::from("world");
+    map.contains_key(&string2);     // reference for lookup
+    map.insert(string2.clone(), 1); // clone if you need to keep original
+    println!("{}", string2);        // ✅ works because we cloned
+}
+```
+
+To make it even clearer, here's what happens with different types:
+
+```rust
+use std::collections::HashMap;
+
+fn main() {
+    let mut map = HashMap::new();
+
+    // 1. Copy types (char, i32, etc.)
+    let x = 'a';
+    map.insert(x, 1);     // x is copied into map
+    println!("{}", x);    // ✅ Still works!
+
+    // 2. Non-Copy types (String, Vec, etc.)
+    let s = String::from("hello");
+    map.insert(s, 2);     // s is moved into map
+    // println!("{}", s); // ❌ Error!
+
+    // 3. Using references
+    let s2 = String::from("world");
+    map.insert(&s2, 3);   // stores reference instead
+    println!("{}", s2);   // ✅ Works!
+
+    // 4. Using clone
+    let s3 = String::from("test");
+    map.insert(s3.clone(), 4); // stores clone, keeps original
+    println!("{}", s3);   // ✅ Works!
+}
+```
+
+The key points to remember:
+
+1. Lookup methods (`contains_key`, `get`, etc.):
+   - Always take references (`&`)
+   - Don't need ownership
+   - Just need to read the key
+
+2. `insert` method:
+   - Takes ownership of key and value
+   - For `Copy` types: makes a copy automatically
+   - For non-`Copy` types: moves the value into the map
+   - Can use `.clone()` if you need to keep the original
+
+This is why in our substring problem, since we're using `char` (which implements `Copy`), we don't need to worry about ownership with `insert`, but we still need references for lookups!
+
+---
+
+We can use `insert` with a reference `&c`, but there are some important considerations. Let me demonstrate:
+
+```rust
+use std::collections::HashMap;
+
+fn main() {
+    // 1. HashMap with owned types
+    let mut map1: HashMap<char, i32> = HashMap::new();
+    let c = 'a';
+    
+    map1.insert(c, 1);     // Works - char is copied
+    map1.insert(&c, 1);    // Also works - but unnecessary for Copy types
+    
+    // 2. HashMap explicitly using references as keys
+    let mut map2: HashMap<&char, i32> = HashMap::new();
+    
+    map2.insert(&c, 1);    // This is natural here because map expects &char
+    // map2.insert(c, 1);  // ❌ Error! Map expects &char but got char
+
+    // 3. With String (non-Copy type)
+    let mut map3: HashMap<String, i32> = HashMap::new();
+    let s = String::from("hello");
+    
+    map3.insert(s, 1);         // Takes ownership of s
+    // map3.insert(&s, 1);     // ❌ Error! Type mismatch: map expects String, not &String
+    
+    // 4. HashMap with reference keys
+    let mut map4: HashMap<&String, i32> = HashMap::new();
+    let s2 = String::from("world");
+    
+    map4.insert(&s2, 1);       // Works - map expects &String
+    println!("{}", s2);        // ✅ s2 still usable because we only stored its reference
+}
+```
+
+Here's a more detailed example showing different scenarios:
+
+```rust
+use std::collections::HashMap;
+
+fn main() {
+    // Example 1: Regular HashMap with char keys
+    let mut regular_map: HashMap<char, i32> = HashMap::new();
+    let c = 'a';
+    
+    // All these work because char implements Copy
+    regular_map.insert(c, 1);      // Most straightforward
+    regular_map.insert(&c, 1);     // Works but unnecessary
+    println!("c is still here: {}", c);  // ✅ Works either way
+    
+    // Example 2: HashMap with reference keys
+    let mut ref_map: HashMap<&char, i32> = HashMap::new();
+    
+    ref_map.insert(&c, 1);         // Correct - map expects &char
+    // ref_map.insert(c, 1);       // ❌ Error! Wrong type
+    
+    // Example 3: With String (non-Copy type)
+    let mut string_map: HashMap<String, i32> = HashMap::new();
+    let s = String::from("hello");
+    
+    string_map.insert(s.clone(), 1);    // Works - clones the string
+    // string_map.insert(&s, 1);        // ❌ Error! Wrong type
+    
+    // Example 4: HashMap with String references
+    let mut string_ref_map: HashMap<&String, i32> = HashMap::new();
+    
+    string_ref_map.insert(&s, 1);       // Works - stores reference
+    println!("Can still use s: {}", s);  // ✅ Works because we only stored reference
+}
+```
+
+Key points:
+
+1. For `Copy` types like `char`:
+```rust
+let mut map: HashMap<char, i32> = HashMap::new();
+let c = 'a';
+
+map.insert(c, 1);     // Preferred - simple and clear
+map.insert(&c, 1);    // Works but unnecessary
+```
+
+2. For non-`Copy` types like `String`:
+```rust
+let mut map: HashMap<String, i32> = HashMap::new();
+let s = String::from("hello");
+
+map.insert(s, 1);         // Takes ownership
+// map.insert(&s, 1);     // ❌ Error! Wrong type
+
+// If you need to keep the original:
+map.insert(s.clone(), 1); // Clone if you need to keep original
+```
+
+3. If you explicitly want to store references:
+```rust
+let mut map: HashMap<&String, i32> = HashMap::new();
+let s = String::from("hello");
+
+map.insert(&s, 1);        // Correct - storing reference
+println!("{}", s);        // ✅ Still have access to s
+```
+
+Best practices:
+1. For `Copy` types: Use direct values (without `&`)
+2. For non-`Copy` types:
+   - Use direct values if you don't need the original anymore
+   - Use `clone()` if you need to keep the original
+   - Use a reference-based HashMap if you need to keep references to the originals
+
+In our substring problem context, since we're using `char` (a `Copy` type), it's clearest and most idiomatic to use:
+```rust
+char_map.insert(current_char, right);  // Without &
+```
+
 ----
-### Now some examples and use cases
+### Now some more, common examples and use cases
 
 
 ```rust
