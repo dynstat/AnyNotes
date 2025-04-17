@@ -363,17 +363,17 @@ A common way to organize a project using a library:
 
 ```
 project/
-├── include/            # Public headers
-│   └── mylib.h
-├── lib/                # Pre-compiled library files
-│   ├── libmylib.a      # Static library (Linux/macOS/MinGW)
-│   └── libmylib.so     # Shared library (Linux)
-│   # Or:
-│   ├── mylib.lib       # Static or Import library (Windows/MSVC)
-│   └── mylib.dll       # Shared library (Windows)
-├── src/                # Source files for the main application
-│   └── main.c
-└── build/              # Directory for build output (executables, objects)
+â”œâ”€â”€ include/            # Public headers
+â”‚   â””â”€â”€ mylib.h
+â”œâ”€â”€ lib/                # Pre-compiled library files
+â”‚   â”œâ”€â”€ libmylib.a      # Static library (Linux/macOS/MinGW)
+â”‚   â””â”€â”€ libmylib.so     # Shared library (Linux)
+â”‚   # Or:
+â”‚   â”œâ”€â”€ mylib.lib       # Static or Import library (Windows/MSVC)
+â”‚   â””â”€â”€ mylib.dll       # Shared library (Windows)
+â”œâ”€â”€ src/                # Source files for the main application
+â”‚   â””â”€â”€ main.c
+â””â”€â”€ build/              # Directory for build output (executables, objects)
 
 ```
 
@@ -401,14 +401,14 @@ Manually typing compile commands becomes tedious for larger projects. Build syst
 
 ```
 project/
-├── include/
-│   └── mylib.h
-├── src/
-│   ├── main.c
-│   └── mylib.c      # Source for our library
-├── build/           # Output directory
-├── Makefile         # Instructions for 'make'
-└── CMakeLists.txt   # Instructions for 'cmake'
+â”œâ”€â”€ include/
+â”‚   â””â”€â”€ mylib.h
+â”œâ”€â”€ src/
+â”‚   â”œâ”€â”€ main.c
+â”‚   â””â”€â”€ mylib.c      # Source for our library
+â”œâ”€â”€ build/           # Output directory
+â”œâ”€â”€ Makefile         # Instructions for 'make'
+â””â”€â”€ CMakeLists.txt   # Instructions for 'cmake'
 ```
 
 ### Code Examples
@@ -695,3 +695,272 @@ $(CROSS_PREFIX)gcc build/main.o -o build/app_dynamic.exe -Lbuild -lmylib.dll # L
   * **Compiler Choice:** You can often swap `gcc` with `clang` (and `g++` with `clang++`) directly in the commands or Makefiles, as Clang aims for GCC compatibility.
   * **C++:** For C++ projects, replace `gcc` with `g++` (or `clang` with `clang++`), change file extensions to `.cpp`, `.hpp`, etc., and be mindful of C++ specific flags (like `-std=c++17`) and linking against the C++ standard library (which `g++`/`clang++` handle automatically).
   * **Build Systems:** For anything beyond trivial projects, learn and use a build system like CMake (recommended for cross-platform) or Make.
+---
+---
+---
+
+To **export** and **import** functions from a dynamic library (`.dll` on Windows, `.so` on Linux, `.dylib` on macOS) **in C and C++**, we must:
+
+---
+# Usage of dll/dylib/so
+## ðŸ“Œ Overview of What We'll Cover
+
+1. **Exporting** the functions in the library source code
+2. **Compiling** the dynamic library
+3. **Importing and using** the dynamic library from another C/C++ project
+4. **Platform-specific differences**
+5. **Practical example**
+6. **Detailed comments for each line**
+7. **Comparison Table**
+
+---
+
+## ðŸ§© Step 1: Exporting Functions from a Library (C/C++)
+
+We write the source file with function definitions, and decorate the symbols (functions) properly to export them.
+
+### âœ… `softToken.c`
+
+```c
+// softToken.c
+
+#include <stdio.h>
+#include <stdint.h>
+
+// Platform-independent export macro
+#ifdef _WIN32
+    #define EXPORT __declspec(dllexport) // For Windows DLL
+#else
+    #define EXPORT __attribute__((visibility("default"))) // For Linux/macOS SO/DYLIB
+#endif
+
+typedef uint8_t U8;
+
+// Exported function: Initializes the soft token
+EXPORT U8 init_softToken(void) {
+    printf("softToken initialized\n");
+    return 0; // Return 0 for success
+}
+
+// Exported function: Simulates sending an APDU and receiving a response
+EXPORT void SendApdu_softToken(U8* InCAPDU, int InCAPDU_len, U8* OutRAPDU, int* OutRAPDU_len) {
+    printf("APDU sent. Length = %d\n", InCAPDU_len);
+
+    // Simulate response (here, we just echo the input)
+    for (int i = 0; i < InCAPDU_len && i < 256; ++i) {
+        OutRAPDU[i] = InCAPDU[i];
+    }
+    *OutRAPDU_len = InCAPDU_len;
+
+    printf("APDU response generated. Length = %d\n", *OutRAPDU_len);
+}
+```
+
+---
+
+## ðŸ—ï¸ Step 2: Compile into Shared Library
+
+| Platform  | Command to Compile the Library |
+|-----------|-------------------------------|
+| Windows   | `cl /LD softToken.c` *(MSVC)* or `gcc -shared -o softToken.dll softToken.c` *(MinGW)* |
+| Linux     | `gcc -fPIC -shared -o libsoftToken.so softToken.c` |
+| macOS     | `gcc -fPIC -dynamiclib -o libsoftToken.dylib softToken.c` |
+
+---
+
+## ðŸ§² Step 3: Importing in Another Project (.c or .cpp)
+
+There are **two ways**:
+1. **Static linking at runtime using header + linker** (compile-time binding)
+2. **Dynamic loading using `dlopen` or `LoadLibrary`** (runtime binding)
+
+---
+
+### âœ… A. Compile-time Binding Example (Only works if library is known at build time)
+
+#### ðŸ“„ `softToken.h`
+
+```c
+#ifndef SOFTTOKEN_H
+#define SOFTTOKEN_H
+
+#include <stdint.h>
+
+#ifdef _WIN32
+    #define IMPORT __declspec(dllimport)  // Windows import
+#else
+    #define IMPORT                       // Not needed on Linux/macOS for import
+#endif
+
+typedef uint8_t U8;
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+IMPORT U8 init_softToken(void); // Declare function from library
+IMPORT void SendApdu_softToken(U8* InCAPDU, int InCAPDU_len, U8* OutRAPDU, int* OutRAPDU_len);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // SOFTTOKEN_H
+```
+
+#### ðŸ“„ `main.c` or `main.cpp`
+
+```c
+// main.c or main.cpp
+
+#include <stdio.h>
+#include "softToken.h" // Header to access DLL/SO functions
+
+int main() {
+    U8 status = init_softToken(); // Initialize the soft token
+
+    U8 capdu[] = {0x00, 0xA4, 0x04, 0x00}; // Example command APDU
+    U8 rapdu[256] = {0};                  // Response buffer
+    int rapdu_len = 0;
+
+    SendApdu_softToken(capdu, 4, rapdu, &rapdu_len); // Send and receive APDU
+
+    printf("RAPDU Length: %d\n", rapdu_len);
+    for (int i = 0; i < rapdu_len; ++i)
+        printf("%02X ", rapdu[i]);
+    printf("\n");
+
+    return 0;
+}
+```
+
+### âœ… Linking (Compile-Time)
+
+| OS        | Command to Compile |
+|-----------|--------------------|
+| Windows   | `cl main.c softToken.lib` or `gcc main.c -L. -lsoftToken` |
+| Linux     | `gcc main.c -L. -lsoftToken` |
+| macOS     | `gcc main.c -L. -lsoftToken` |
+
+---
+
+### âœ… B. Runtime Loading (Cross-Platform)
+
+#### ðŸ“„ `dynamic_loader.c`
+
+```c
+#include <stdio.h>
+#include <stdint.h>
+#ifdef _WIN32
+    #include <windows.h>
+#else
+    #include <dlfcn.h>
+#endif
+
+typedef uint8_t U8;
+
+int main() {
+    // Function pointers
+    typedef U8 (*InitFunc)(void);
+    typedef void (*SendApduFunc)(U8*, int, U8*, int*);
+
+    // Handle to loaded library
+#ifdef _WIN32
+    HMODULE handle = LoadLibrary("softToken.dll");
+    if (!handle) {
+        printf("Could not load DLL\n");
+        return 1;
+    }
+    InitFunc init = (InitFunc)GetProcAddress(handle, "init_softToken");
+    SendApduFunc sendApdu = (SendApduFunc)GetProcAddress(handle, "SendApdu_softToken");
+#else
+    void* handle = dlopen("./libsoftToken.so", RTLD_LAZY); // or .dylib on macOS
+    if (!handle) {
+        printf("Could not load shared object: %s\n", dlerror());
+        return 1;
+    }
+    InitFunc init = (InitFunc)dlsym(handle, "init_softToken");
+    SendApduFunc sendApdu = (SendApduFunc)dlsym(handle, "SendApdu_softToken");
+#endif
+
+    if (!init || !sendApdu) {
+        printf("Could not locate functions\n");
+        return 1;
+    }
+
+    U8 capdu[] = {0x00, 0xA4, 0x04, 0x00};
+    U8 rapdu[256] = {0};
+    int rapdu_len = 0;
+
+    init();
+    sendApdu(capdu, 4, rapdu, &rapdu_len);
+
+    printf("RAPDU: ");
+    for (int i = 0; i < rapdu_len; ++i) {
+        printf("%02X ", rapdu[i]);
+    }
+    printf("\n");
+
+#ifdef _WIN32
+    FreeLibrary(handle);
+#else
+    dlclose(handle);
+#endif
+
+    return 0;
+}
+```
+
+---
+
+## ðŸ“Š Comparison Table: Static vs Dynamic Linking
+
+| Feature                     | Static Linking                     | Dynamic Linking (`dlopen`, `LoadLibrary`) |
+|----------------------------|------------------------------------|-------------------------------------------|
+| Binding Time               | Compile time                       | Runtime                                   |
+| Flexibility                | Low                                | High                                      |
+| Need for .lib/.a           | Yes                                | No                                        |
+| Requires header            | Yes                                | Optional                                  |
+| Portability                | Lower                              | Higher                                    |
+| Platform API Used          | Compiler/linker                    | OS API (dlopen / LoadLibrary)             |
+| Example Use                | Performance-critical apps          | Plugin systems, optional modules          |
+
+---
+
+## ðŸ§  Practical Example Use Cases
+
+| Use Case                               | Approach         |
+|----------------------------------------|------------------|
+| Driver or system-level module          | Static linking   |
+| Plugin-based architecture (e.g., OBS)  | Dynamic loading  |
+| Android NDK JNI `.so` usage            | Static/dynamic   |
+| Secure module like SoftToken           | Runtime dynamic  |
+
+---
+
+## ðŸ§± Diagram: Library Usage in C/C++ Projects
+
+```plaintext
+                +---------------------+
+                | softToken.c         |
+                |  [Exports functions]|
+                +---------------------+
+                         |
+                         v
+        +-------------------------------+
+        | Compiled to DLL/SO/DYLIB      |
+        | (softToken.dll/.so/.dylib)    |
+        +-------------------------------+
+                         |
+         +-----------------------------------+
+         |      Application Code (.c/.cpp)   |
+         |   - statically linked (header+lib)|
+         |   - OR dynamically loaded at runtime
+         +-----------------------------------+
+```
+
+---
+
+If you'd like, I can generate a **fully working CMake project** or **makefile-based layout** for this across platforms.
+
+Let me know if you want the same logic in **Rust, Go, or Python using ctypes/cffi too.**
