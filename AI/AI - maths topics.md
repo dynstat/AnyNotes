@@ -62,10 +62,13 @@ $$
 \mathbf{v} = \begin{bmatrix} v_1 \\ v_2 \\ \vdots \\ v_n \end{bmatrix}
 $$
 **Common Operations:**
-- **Addition:** \(\mathbf{u} + \mathbf{v} = \begin{bmatrix} u_1 + v_1 \\ u_2 + v_2 \\ \vdots \\ u_n + v_n \end{bmatrix}\)
-- **Scalar Multiplication:** \(c \mathbf{v} = \begin{bmatrix} c v_1 \\ c v_2 \\ \vdots \\ c v_n \end{bmatrix}\)
-- **Dot Product:** \(\mathbf{u} \cdot \mathbf{v} = \sum_{i=1}^{n} u_i v_i\)
-- **Norm (Magnitude):** \(\|\mathbf{v}\| = \sqrt{\mathbf{v} \cdot \mathbf{v}} = \sqrt{\sum_{i=1}^{n} v_i^2}\)
+- **Addition:** 
+  $$
+  \mathbf{u} + \mathbf{v} = \begin{bmatrix} u_1 + v_1 \\ u_2 + v_2 \\ \vdots \\ u_n + v_n \end{bmatrix}\
+  $$
+- **Scalar Multiplication:** $$ c \mathbf{v} = \begin{bmatrix} c v_1 \\ c v_2 \\ \vdots \\ c v_n \end{bmatrix}\ $$
+- **Dot Product:** $$ \mathbf{u} \cdot \mathbf{v} = \sum_{i=1}^{n} u_i v_i\ $$
+- **Norm (Magnitude):** $$ \|\mathbf{v}\| = \sqrt{\mathbf{v} \cdot \mathbf{v}} = \sqrt{\sum_{i=1}^{n} v_i^2}\ $$
 
 **Analogy:**  
 Think of a vector as an arrow pointing from the origin to a point in space. The direction and length of the arrow represent the vector's direction and magnitude, respectively.
