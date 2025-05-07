@@ -367,12 +367,12 @@ print(f"Predicted Species: {predicted_species}")
 
 ## Summary of Concepts
 
-| **Term**    | **Definition**                                                                 | **Example**                            |
-|-------------|---------------------------------------------------------------------------------|----------------------------------------|
-| **Features** | Input variables used by the model.                                             | Age, income, education level           |
-| **Labels**   | The target variable the model aims to predict.                                | Loan approval status (`approved/denied`)|
-| **Model**    | An algorithm that learns from data to make predictions.                       | Decision Tree, Linear Regression       |
-| **Inference**| Using the trained model to make predictions on new data.                       | Predicting house prices for new listings|
+| **Term**      | **Definition**                                           | **Example**                              |
+| ------------- | -------------------------------------------------------- | ---------------------------------------- |
+| **Features**  | Input variables used by the model.                       | Age, income, education level             |
+| **Labels**    | The target variable the model aims to predict.           | Loan approval status (`approved/denied`) |
+| **Model**     | An algorithm that learns from data to make predictions.  | Decision Tree, Linear Regression         |
+| **Inference** | Using the trained model to make predictions on new data. | Predicting house prices for new listings |
 
 ---
  
