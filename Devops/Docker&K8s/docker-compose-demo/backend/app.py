@@ -40,3 +40,7 @@ def create_item(name: str):
             cur.execute("INSERT INTO items (name) VALUES (%s)", (name,))
             conn.commit()
     return "OK"
+
+@app.get("/items")
+def test(val:str = "blank"):
+    return "This is working.. Your value was {val}"
