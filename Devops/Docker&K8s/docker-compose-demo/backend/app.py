@@ -41,6 +41,6 @@ def create_item(name: str):
             conn.commit()
     return "OK"
 
-@app.get("/items")
+@app.get("/test")
 def test(val:str = "blank"):
     return "This is working.. Your value was {val}"
